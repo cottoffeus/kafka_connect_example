@@ -1,0 +1,71 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+
+  postgres:
+    image: debezium/postgres:13-alpine
+    restart: always
+    depends_on:
+      - kafka-connector
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRESQL_REPLICATION_MODE: master
+      POSTGRESQL_REPLICATION_USER: postgres
+      POSTGRESQL_REPLICATION_PASSWORD: example
+    ports:
+      - "5432:5432"
+    volumes:
+#       - ./postgres_data/:/var/lib/postgresql/data
+       - postgres_volume:/var/lib/postgresql/data
+       - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8888:8080
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  kafka-connector:
+      image: cottoffeus/kafka-connect-extended-jdbc:1.0.1
+      ports:
+        - 9090:8083
+      links:
+        - kafka
+      depends_on:
+        - kafka
+      environment:
+        - CONNECT_BOOTSTRAP_SERVERS=kafka:9092
+        - CONNECT_GROUP_ID=pg
+        - CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR=1
+        - CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR=1
+        - CONNECT_STATUS_STORAGE_REPLICATION_FACTOR=1
+        - CONNECT_CONFIG_STORAGE_TOPIC=connect_configs
+        - CONNECT_OFFSET_STORAGE_TOPIC=connect_offsets
+        - CONNECT_STATUS_STORAGE_TOPIC=connect_statuses
+        - CONNECT_KEY_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+        - CONNECT_VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+        - CONNECT_INTERNAL_KEY_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+        - CONNECT_INTERNAL_VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+        - CONNECT_REST_ADVERTISED_HOST_NAME=kafka-connector
+volumes:
+  postgres_volume:
+    driver: local
