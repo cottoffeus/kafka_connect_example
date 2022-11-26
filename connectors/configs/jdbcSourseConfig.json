@@ -4,14 +4,12 @@
     "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
     "topic.prefix": "postgresql_",
     "ssl.mode": "prefer",
-    "connection.host": "kafka_connect_example-postgres-1",
-    "connection.port": "5432",
+    "connection.url" : "jdbc:postgresql://postgres:5432/postgres",
     "connection.user": "postgres",
     "connection.password": "example",
-    "db.name": "postgres",
     "table.whitelist": "countries,departments,dependents,employees,locations,regions",
     "db.timezone": "UTC",
-    "mode": "timestamp+incrementing",
+    "mode": "bulk",
     "tasks.max": "1"
   }
 }

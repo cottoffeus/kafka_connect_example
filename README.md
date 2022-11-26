@@ -6,6 +6,8 @@
 - docker-compose-debezium.yaml - коннектор на основе Debezium
 - или
 - docker-compose-jdbc-source.yaml - коннектор на основе драйвера JDBC
+Чтобы запустить коннектор требуется отправить конфигурацию POST запросом на адрес http://localhost:9090/connectors
+- Конфигурацию взять из connectors/configs
 
 ### В результате разварчиваются сервисы:
 
