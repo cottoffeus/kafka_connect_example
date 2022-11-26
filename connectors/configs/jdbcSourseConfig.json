@@ -1,7 +1,6 @@
-
 {
   "name" : "confluent-postgresql-source",
-  "connector.class": "PostgresSource",
+  "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
   "topic.prefix" : "postgresql_",
   "ssl.mode" : "prefer",
   "connection.host" : "kafka_connect_example_postgres_1",

@@ -16,6 +16,5 @@
     "transforms.AddPrefix.type": "org.apache.kafka.connect.transforms.RegexRouter",
     "transforms.AddPrefix.regex": "kafka_connect_example_postgres_1.public.(.*)",
     "transforms.AddPrefix.replacement": "data.cdc.employee",
-    "output.data.format": "JSON"
   }
 }
