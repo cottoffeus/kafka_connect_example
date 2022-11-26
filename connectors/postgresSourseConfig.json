@@ -1,0 +1,16 @@
+
+{
+  "name" : "confluent-postgresql-source",
+  "connector.class": "PostgresSource",
+  "topic.prefix" : "postgresql_",
+  "ssl.mode" : "prefer",
+  "connection.host" : "kafka_connect_example_postgres_1",
+  "connection.port" : "5432",
+  "connection.user" : "postgres",
+  "connection.password": "example",
+  "db.name": "postgres",
+  "table.whitelist": "countries,departments,dependents,employees,locations,regions",
+  "output.data.format": "JSON",
+  "db.timezone": "UTC",
+  "tasks.max" : "1"
+}

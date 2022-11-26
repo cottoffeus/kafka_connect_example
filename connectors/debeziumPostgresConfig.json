@@ -1,0 +1,21 @@
+{
+  "name": "pg-employees-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "plugin.name": "pgoutput",
+    "database.hostname": "kafka_connect_example_postgres_1",
+    "database.port": "5432",
+    "database.user": "postgres",
+    "database.password": "example",
+    "database.dbname" : "postgres",
+    "database.server.name": "employees_db",
+    "table.include.list": "public.(.*)",
+    "heartbeat.interval.ms": "5000",
+    "transforms": "AddPrefix",
+    "topic.prefix": "rep",
+    "transforms.AddPrefix.type": "org.apache.kafka.connect.transforms.RegexRouter",
+    "transforms.AddPrefix.regex": "kafka_connect_example_postgres_1.public.(.*)",
+    "transforms.AddPrefix.replacement": "data.cdc.employee",
+    "output.data.format": "JSON"
+  }
+}
