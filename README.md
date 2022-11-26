@@ -1,7 +1,8 @@
 ## Проект для демонстрации работы Kafka Connect
 
-Для запуска использовать Docker-Compose
+ВАЖНО: Сейчас при первом запуске Debezium коннектора нужно подменить файл конфигурации в volume на postgres_data/pg_hba.conf. Нужно для разрешения репликации (указан хост подключения Кафка Коннектора)
 
+Для запуска использовать Docker-Compose
 - docker-compose-debezium.yaml - коннектор на основе Debezium
 - или
 - docker-compose-jdbc-source.yaml - коннектор на основе драйвера JDBC
